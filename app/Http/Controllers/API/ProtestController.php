@@ -178,7 +178,7 @@ class ProtestController extends Controller
             return response()->json([
                 'status' => 200,
                 'success' => true,
-                'data' => $protests
+                'protests' => $protests
             ], 200);
         }
         return  response()->json([

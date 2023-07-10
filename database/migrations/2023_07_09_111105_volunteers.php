@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('users', function (Blueprint $table) {
+
+        Schema::create('volunteers', function (Blueprint $table) {
             $table->string('id')->unique();
             $table->string('username');
             $table->string('email');
             $table->string('password');
-            $table->string('role');
-            $table->boolean('is_banned');
-            $table->foreign('role')->references('role_name')->on('roles')->onDelete('cascade');
+            $table->integer('phone_number');
+            $table->binary('national_id')->nullable();
+            $table->binary('conduct_certificate')->nullable();
+            $table->boolean('is_validated');
             $table->timestamps();
-        
-            $table->index('role');
         });
+        //
     }
 
     /**

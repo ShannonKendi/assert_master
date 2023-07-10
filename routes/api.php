@@ -19,10 +19,10 @@ use App\Http\Controllers\API\RoleController;
 
 Route::post('user/register', [UserController::class, 'register']);
 Route::post('user/login', [UserController::class, 'login']);
-Route::delete('user/{id}', [UserController::class, 'deleteUser']);
-Route::put('admin/updateUser', [UserController::class, 'update_user']);
+Route::post('user/updateUser', [UserController::class, 'update_user']);
 
 Route::get('users', [UserController::class, 'get_all_users']);
+Route::get('users/{id}', [UserController::class, 'getSpecificUser']);
 
 Route::post('protests', [ProtestController::class, 'post_protest']);
 Route::get('protests', [ProtestController::class, 'get_all_protests']);
@@ -35,3 +35,9 @@ Route::post('protests/emergency', [ProtestController::class, 'emergency']);
 
 Route::get('roles', [RoleController::class, 'get_roles']);
 Route::post('roles', [RoleController::class, 'add_role']);
+
+
+Route::get('volunteers', [UserController::class, 'get_volunteers']);
+Route::post('volunteer/register', [UserController::class, 'registerVolunteer']);
+Route::post('volunteer/delete/{id}', [UserController::class, 'delete_volunteers']);
+Route::post('volunteer/update', [UserController::class, 'update_volunteer']);

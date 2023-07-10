@@ -11,5 +11,5 @@ class users extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $table = "users";
-    protected $fillable = ['id', 'username', 'email', 'password', 'role'];
+    protected $fillable = ['id', 'username', 'email', 'password', 'role', 'is_banned'];
 }
