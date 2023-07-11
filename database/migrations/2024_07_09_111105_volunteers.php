@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->integer('phone_number');
             $table->binary('national_id')->nullable();
+            $table->string('role')->default('volunteer');
             $table->binary('conduct_certificate')->nullable();
             $table->boolean('is_validated');
             $table->timestamps();

@@ -24,6 +24,7 @@ Route::post('updateUser', [UserController::class, 'update_user']);
 
 Route::get('users', [UserController::class, 'get_all_users']);
 Route::get('users/{id}', [UserController::class, 'getSpecificUser']);
+Route::delete('users/{id}', [UserController::class, 'delete_user']);
 
 Route::post('protests', [ProtestController::class, 'post_protest']);
 Route::get('protests', [ProtestController::class, 'get_all_protests']);
@@ -41,8 +42,12 @@ Route::post('roles', [RoleController::class, 'add_role']);
 
 
 Route::get('volunteers', [UserController::class, 'get_volunteers']);
+Route::get('volunteers/{id}', [UserController::class, 'get_specific_volunteer']);
+
 Route::post('volunteer/register', [UserController::class, 'registerVolunteer']);
 Route::post('volunteer/delete/{id}', [UserController::class, 'delete_volunteers']);
 Route::post('volunteer/update', [UserController::class, 'update_volunteer']);
 
 Route::post('volunteer/usher', [ProtestController::class, 'volunteerUsher']);
+Route::get('volunteerRequests', [ProtestController::class, 'get_volunteer_requests']);
+Route::put('request/update', [ProtestController::class, 'updateRequest']);

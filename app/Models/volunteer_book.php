@@ -10,6 +10,6 @@ class volunteer_book extends Model
     use HasFactory;
 
     protected $table = 'volunteer_book';
-    protected $fillable = ['id','volunteer_id','protest_id','is_verified'];
+    protected $fillable = ['volunteer_id','protest_id','is_validated'];
 
 }

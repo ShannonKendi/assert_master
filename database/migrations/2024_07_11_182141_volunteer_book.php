@@ -13,10 +13,10 @@ return new class extends Migration
     {
         //
         Schema::create('volunteer_book', function (Blueprint $table) {
-            $table->integer('id')->unique();
+            $table->id();
             $table->string('volunteer_id');
             $table->string('protest_id');
-            $table->boolean('is_validated');
+            $table->boolean('is_validated')->default(false);
             $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
             $table->foreign('protest_id')->references('protest_id')->on('protests')->onDelete('cascade');
             $table->timestamps();

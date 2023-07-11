@@ -220,6 +220,25 @@ class ProtestController extends Controller
         ], 400);
     }
 
+    public function get_volunteer_requests()
+    {
+        //gets all protests
+        $protests = volunteer_book::all();
+        //if none return an error code message of 400
+        if ($protests->count() > 0) {
+            return response()->json([
+                'status' => 200,
+                'success' => true,
+                'volunteer_requests' => $protests
+            ], 200);
+        }
+        return  response()->json([
+            'status' => 400,
+            'success' => false,
+            'message' => 'No records found'
+        ], 400);
+    }
+
     public function getValidProtests()
     {
         $protests = protests::where('is_validated', '=', 1)->get();
@@ -268,9 +287,9 @@ class ProtestController extends Controller
                 'message' => 'Request could not be completed.Check your credentials...'
             ], 400);
         }
-        $existing  = volunteer_book::where('volunteer_id', $userData->volunteer_id)
-            ->where('protest_id', $userData->protest_id)->get();
-        if ($existing) {
+        $existing  = volunteer_book::where('volunteer_id', '=', $userData->volunteer_id)
+            ->where('protest_id', '=', $userData->protest_id)->get();
+        if ($existing->count() > 0) {
             return response()->json([
                 'status' => 200,
                 'success' => true,
@@ -280,7 +299,7 @@ class ProtestController extends Controller
 
         $new_volunteer = volunteer_book::create(
             [
-                'volunteer_id' => $userData->user_id,
+                'volunteer_id' => $userData->volunteer_id,
                 'protest_id' => $userData->protest_id,
                 'is_validated' => false,
             ]
@@ -293,6 +312,12 @@ class ProtestController extends Controller
                 'message' => 'Your volunteer request failed. Please try again another time...'
             ], 400);
         }
+
+        return response()->json([
+            'status' => 200,
+            'success' => true,
+            'message' => 'Your volunteer request is being processed...'
+        ], 200);
     }
     public function get_specific_protest($protest_id)
     {
@@ -339,5 +364,41 @@ class ProtestController extends Controller
                 400
             );
         }
+    }
+
+    public function updateRequest(Request $request)
+    {
+        $exists = volunteer_book::find($request->id);
+        if (!$exists) {
+            return response()->json(
+                [
+                    'status' => 400,
+                    'message' => 'Request could not be found'
+                ],
+                400
+            );
+        }
+
+        $exists->fill([
+            'is_validated' => $request->is_validated
+        ]);
+
+        $newRequest = $exists->save();
+
+        if (!$newRequest) {
+            return response()->json([
+                'status' => 400,
+                'success' => false,
+                'message' => "Request data could not be updated!"
+            ], 400);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'success' => true,
+            'message' => "Request updated successfully!",
+            'data' => $request->is_validated
+
+        ], 200);
     }
 }
