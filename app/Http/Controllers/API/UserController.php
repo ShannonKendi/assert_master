@@ -31,7 +31,7 @@ class UserController extends Controller
         'min' => 'Must have a minimum 8 characters',
     ];
 
-    private function generateToken()
+    public function generateToken()
     {
         $token = Str::random(32);
 
@@ -95,7 +95,7 @@ class UserController extends Controller
         return response()->json([
             'status' => 200,
             'res' => false,
-            'message'=>'user not found'
+            'message' => 'user not found'
         ], 200);
     }
     public function get_volunteers()
@@ -266,10 +266,10 @@ class UserController extends Controller
         }
 
         $selectedUser->fill([
-            // 'username' => $userData->username ?? $selectedUser->username,
-            // 'email' => $userData->email ?? $selectedUser->email,
-            // 'role' => $userData->role_name ?? $selectedUser->role_name,
-            'is_banned' => $userData->is_banned 
+            'username' => $userData->username ?? $selectedUser->username,
+            'email' => $userData->email ?? $selectedUser->email,
+            'role' => $userData->role_name ?? $selectedUser->role_name,
+            'is_banned' => $userData->is_banned ?? $selectedUser->is_banned
         ]);
 
         $newUser = $selectedUser->save();

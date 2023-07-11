@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\protests;
 use App\Models\users;
+use App\Models\volunteer_book;
+use App\Models\volunteers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -165,6 +167,37 @@ class ProtestController extends Controller
 
     public function edit_protest(Request $protestData)
     {
+        $selectedProtest = protests::find($protestData->id);
+        if (!$selectedProtest) {
+            return response()->json([
+                'status' => 400,
+                'success' => false,
+                'message' => "Protest could not be found!"
+            ], 400);
+        }
+
+        $selectedProtest->fill([
+            // 'username' => $protestData->username ?? $selectedProtest->username,
+            // 'email' => $protestData->email ?? $selectedProtest->email,
+            // 'role' => $protestData->role_name ?? $selectedProtest->role_name,
+            'is_validated' => $protestData->is_validated
+        ]);
+
+        $newProtest = $selectedProtest->save();
+
+        if (!$newProtest) {
+            return response()->json([
+                'status' => 400,
+                'success' => false,
+                'message' => "Protest data could not be updated!"
+            ], 400);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'success' => true,
+            'message' => "Protest updated successfully!"
+        ], 200);
     }
 
     //complete
@@ -172,7 +205,6 @@ class ProtestController extends Controller
     {
         //gets all protests
         $protests = protests::all();
-
         //if none return an error code message of 400
         if ($protests->count() > 0) {
             return response()->json([
@@ -188,6 +220,22 @@ class ProtestController extends Controller
         ], 400);
     }
 
+    public function getValidProtests()
+    {
+        $protests = protests::where('is_validated', '=', 1)->get();
+        if ($protests->count() > 0) {
+            return response()->json([
+                'status' => 200,
+                'success' => true,
+                'protests' => $protests
+            ], 200);
+        }
+        return  response()->json([
+            'status' => 400,
+            'success' => false,
+            'message' => 'No records found'
+        ], 400);
+    }
     public function get_user_protests($user_id)
     {
         //First the passed id is validated whether it's in the db and the boolean result is stored in a variable
@@ -210,6 +258,42 @@ class ProtestController extends Controller
         }
     }
 
+    public function volunteerUsher(Request $userData)
+    {
+        $selected = volunteers::find($userData->volunteer_id);
+        if (!$selected) {
+            return response()->json([
+                'status' => 400,
+                'success' => false,
+                'message' => 'Request could not be completed.Check your credentials...'
+            ], 400);
+        }
+        $existing  = volunteer_book::where('volunteer_id', $userData->volunteer_id)
+            ->where('protest_id', $userData->protest_id)->get();
+        if ($existing) {
+            return response()->json([
+                'status' => 200,
+                'success' => true,
+                'message' => 'You have already volunteered...'
+            ], 200);
+        }
+
+        $new_volunteer = volunteer_book::create(
+            [
+                'volunteer_id' => $userData->user_id,
+                'protest_id' => $userData->protest_id,
+                'is_validated' => false,
+            ]
+        );
+
+        if (!$new_volunteer) {
+            return response()->json([
+                'status' => 400,
+                'success' => false,
+                'message' => 'Your volunteer request failed. Please try again another time...'
+            ], 400);
+        }
+    }
     public function get_specific_protest($protest_id)
     {
         $protest = protests::where('protest_id', '=', $protest_id)->first();

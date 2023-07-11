@@ -17,17 +17,20 @@ use App\Http\Controllers\API\RoleController;
 |
 */
 
+
 Route::post('user/register', [UserController::class, 'register']);
 Route::post('user/login', [UserController::class, 'login']);
-Route::post('user/updateUser', [UserController::class, 'update_user']);
+Route::post('updateUser', [UserController::class, 'update_user']);
 
 Route::get('users', [UserController::class, 'get_all_users']);
 Route::get('users/{id}', [UserController::class, 'getSpecificUser']);
 
 Route::post('protests', [ProtestController::class, 'post_protest']);
 Route::get('protests', [ProtestController::class, 'get_all_protests']);
+
+Route::get('valid-protests', [ProtestController::class, 'getValidProtests']);
 Route::delete('protests/{protest_id}', [ProtestController::class, 'delete_protest']);
-Route::put('protests/{protest_id}', [ProtestController::class, 'edit_protest']);
+Route::post('updateProtest', [ProtestController::class, 'edit_protest']);
 Route::get('protests/{user_id}', [ProtestController::class, 'get_user_protests']);
 Route::get('protest/{protest_id}', [ProtestController::class, 'get_specific_protest']);
 
@@ -41,3 +44,5 @@ Route::get('volunteers', [UserController::class, 'get_volunteers']);
 Route::post('volunteer/register', [UserController::class, 'registerVolunteer']);
 Route::post('volunteer/delete/{id}', [UserController::class, 'delete_volunteers']);
 Route::post('volunteer/update', [UserController::class, 'update_volunteer']);
+
+Route::post('volunteer/usher', [ProtestController::class, 'volunteerUsher']);
